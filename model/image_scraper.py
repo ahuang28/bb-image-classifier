@@ -107,6 +107,7 @@ def fetch_image_urls(query: str, max_links_to_fetch: int, wd, sleep_between_inte
                     src = actual_image.get_attribute("src")
                     if src:
                         image_urls.add(src)
+                        print("Found image URL:", src)
             except Exception as e:
                 print("Error waiting for full image URL:", e)
 
