@@ -8,19 +8,8 @@ function init() {
         dictDefaultMessage: "Some Message",
         autoProcessQueue: false
     });
-
-    const MAX_FILE_SIZE = 1024 * 1024; // 1MB limit
     
     dz.on("addedfile", function() {
-        // Check the file size
-        if (dz.files[0].size > MAX_FILE_SIZE) {
-            $("#sizeError").show();
-            dz.removeFile(dz.files[0]); 
-            return;
-        } else {
-            $("#sizeError").hide();
-        }
-
         if (dz.files[1]!=null) {
             dz.removeFile(dz.files[0]);        
         }
@@ -70,6 +59,12 @@ function init() {
                 }
             }
             // dz.removeFile(file);            
+        })
+
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            // Handle the error (413 Request Entity Too Large or other server errors)
+            $("#sizeError").show();
+            return;
         });
     });
 
