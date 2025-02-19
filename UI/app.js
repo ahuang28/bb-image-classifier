@@ -8,8 +8,19 @@ function init() {
         dictDefaultMessage: "Some Message",
         autoProcessQueue: false
     });
+
+    const MAX_FILE_SIZE = 1024 * 1024; // 1MB limit
     
     dz.on("addedfile", function() {
+        // Check the file size
+        if (dz.files[0].size > MAX_FILE_SIZE) {
+            $("#sizeError").show();
+            dz.removeFile(dz.files[0]); 
+            return;
+        } else {
+            $("#sizeError").hide();
+        }
+
         if (dz.files[1]!=null) {
             dz.removeFile(dz.files[0]);        
         }
@@ -28,7 +39,8 @@ function init() {
             console.log(data);
             if (!data || data.length==0) {
                 $("#resultHolder").hide();
-                $("#divClassTable").hide();                
+                $("#divClassTable").hide();
+                $("#sizeError").hide();                
                 $("#error").show();
                 return;
             }
@@ -44,6 +56,7 @@ function init() {
                 }
             }
             if (match) {
+                $("#sizeError").hide();
                 $("#error").hide();
                 $("#resultHolder").show();
                 $("#divClassTable").show();
@@ -70,6 +83,7 @@ $(document).ready(function() {
     $("#error").hide();
     $("#resultHolder").hide();
     $("#divClassTable").hide();
+    $("#sizeError").hide();
 
     init();
 });
